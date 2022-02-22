@@ -1,0 +1,8 @@
+pluginManagement {
+    plugins {
+        id 'org.jetbrains.changelog' version "${jetbrainsChangelogVersion}"
+        id 'net.researchgate.release' version "${researchgateReleaseVersion}"
+    }
+}
+
+rootProject.name = 'tes-spring-boot-library-template'

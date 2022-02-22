@@ -1,0 +1,78 @@
+import org.gradle.api.publish.maven.MavenPublication
+
+import java.text.SimpleDateFormat
+
+plugins {
+    id 'org.jetbrains.changelog'
+    id 'net.researchgate.release'
+}
+
+apply plugin: 'java-library'
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+group 'dk.sunepoulsen.tes'
+version "${project.property('version')}"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencies {
+    // Lombok
+    compileOnly "org.projectlombok:lombok:${project.property('lombok.version')}"
+    annotationProcessor "org.projectlombok:lombok:${project.property('lombok.version')}"
+
+    // Logging
+    implementation "ch.qos.logback:logback-classic:${project.property('logback.version')}"
+    implementation "org.slf4j:log4j-over-slf4j:${project.property('log4j-over-slf4j.version')}"
+
+    // JUnit
+    testImplementation "org.junit.vintage:junit-vintage-engine:${project.property('junit-jupiter.version')}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${project.property('junit-jupiter.version')}"
+
+    // Spock
+    testImplementation "org.codehaus.groovy:groovy:${project.property('groovy.version')}"
+    testImplementation "org.spockframework:spock-core:${project.property('spock-core.version')}"
+    testImplementation "cglib:cglib-nodep:${project.property('cglib-nodep.version')}"
+    testImplementation "org.objenesis:objenesis:${project.property('objenesis.version')}"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task allWrappers(type: Wrapper) {
+    gradleVersion = "${project.property('gradle.version')}"
+}
+
+changelog {
+    path = "${project.projectDir}/CHANGELOG.md"
+    header = "${-> version.get()} - ${new SimpleDateFormat("yyyy-MM-dd").format(new Date())}"
+    headerParserRegex = ~/(\d+\.\d+\.\d+.+)/
+    itemPrefix = "-"
+    keepUnreleasedSection = true
+    unreleasedTerm = "Unreleased work"
+    groups = ["Features", "Fixed", "Security"]
+}
+
+release {
+    git {
+        requireBranch = 'main'
+    }
+}
