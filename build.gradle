@@ -34,6 +34,10 @@ java {
 }
 
 dependencies {
+    // Test containers
+    implementation platform("org.testcontainers:testcontainers-bom:${project.property('org-testcontainers.version')}")
+    implementation 'org.testcontainers:testcontainers'
+
     // Lombok
     compileOnly "org.projectlombok:lombok:${project.property('lombok.version')}"
     annotationProcessor "org.projectlombok:lombok:${project.property('lombok.version')}"
@@ -41,6 +45,9 @@ dependencies {
     // Logging
     implementation "ch.qos.logback:logback-classic:${project.property('logback.version')}"
     implementation "org.slf4j:log4j-over-slf4j:${project.property('log4j-over-slf4j.version')}"
+
+    // Utilities
+    implementation "com.google.guava:guava:${project.property('guava.version')}"
 
     // JUnit
     testImplementation "org.junit.vintage:junit-vintage-engine:${project.property('junit-jupiter.version')}"

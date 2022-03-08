@@ -5,4 +5,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'tes-spring-boot-library-template'
+rootProject.name = 'tes-jmeter'
